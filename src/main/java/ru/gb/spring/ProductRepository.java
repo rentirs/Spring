@@ -1,18 +1,21 @@
 package ru.gb.spring;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class ProductRepository {
-    private final List<Product> products;
+    private List<Product> products;
 
     public ProductRepository() {
-        this.products = List.of(
-                new Product(1, "Картофель", 90.2),
-                new Product(2, "Масло", 65.5),
-                new Product(3, "Хлеб", 25.0),
-                new Product(4, "Сыр", 123.2),
-                new Product(5, "Молоко", 35.7)
+        this.products = new ArrayList<>(
+                List.of(
+                new Product(1, "Картофель", 90.2f),
+                new Product(2, "Масло", 65.5f),
+                new Product(3, "Хлеб", 25.0f),
+                new Product(4, "Сыр", 123.2f),
+                new Product(5, "Молоко", 35.7f)
+                )
         );
     }
 
@@ -22,5 +25,9 @@ public class ProductRepository {
 
     public List<Product> findAll() {
         return products;
+    }
+
+    public void add (Product product) {
+        this.products.add(product);
     }
 }

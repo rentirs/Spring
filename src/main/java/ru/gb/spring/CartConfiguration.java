@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-public class appConfiguration {
+public class CartConfiguration {
 
     @Bean
     public ProductRepository productRepository() {
@@ -15,5 +15,10 @@ public class appConfiguration {
     @Bean
     public Cart cart(ProductRepository repository) {
         return new Cart(repository);
+    }
+
+    @Bean
+    OrderRepository orderRepository() {
+        return new OrderRepository();
     }
 }
