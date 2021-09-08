@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+</head>
+
+<body>
+<h1>Заказы</h1>
+<div>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Дата</th>
+            <th>Стоимость</th>
+            <th>Удаление</th>
+        </tr>
+        <tr th:each ="order:${orders}">
+            <td th:utext="${order.getId()}">...</td>
+            <td th:utext="${order.getDate()}">...</td>
+            <td th:utext="${order.getCost()}">...</td>
+            <td> <a th:href="@{|/orders/delete/${order.getId()}|}">Удалить</a></td>
+        </tr>
+    </table>
+</div>
+<a href="orders/add">Добавить пустой заказ в репозиторий</a>
+<br>
+<a href=index.html>На главную</a>
+</body>
+</html>
