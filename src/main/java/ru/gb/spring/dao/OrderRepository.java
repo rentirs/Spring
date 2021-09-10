@@ -1,4 +1,4 @@
-package ru.gb.spring.repository;
+package ru.gb.spring.dao;
 
 import lombok.ToString;
 import org.springframework.stereotype.Repository;
@@ -11,9 +11,9 @@ import java.util.*;
 @Repository
 public class OrderRepository {
     private final List<Order> orders;
-    Date date = new Date();
-    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-    String dateString = formatter.format(date);
+    final Date date = new Date();
+    final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+    final String dateString = formatter.format(date);
 
     public OrderRepository() {
         this.orders = new ArrayList<>(

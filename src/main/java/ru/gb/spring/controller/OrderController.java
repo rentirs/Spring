@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.spring.domain.Order;
-import ru.gb.spring.repository.OrderRepository;
+import ru.gb.spring.dao.OrderRepository;
 
 @Controller
 public class OrderController {

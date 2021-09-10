@@ -3,11 +3,11 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Добавление нового товара в репозиторий</title>
+    <title>Изменение товара в репозитории</title>
 </head>
 
 <body>
-<form th:action="@{/products/add}" th:object="${product}" method="post">
+<form th:action="@{|/products/change/${product.getId}|}" th:object="${product}" method="post">
     Наименование: <input type="text" th:field="*{name}"/>
     <br>
     Цена: <input type="text" th:field="*{price}"/>
