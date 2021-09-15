@@ -14,5 +14,7 @@
 <!--        <property name="hibernate.hbm2ddl.auto">create</property>-->
 
         <mapping class="ru.gb.spring.domain.Product"/>
+        <mapping class="ru.gb.spring.domain.Order"/>
+        <mapping class="ru.gb.spring.domain.Client"/>
     </session-factory>
 </hibernate-configuration>

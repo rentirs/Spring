@@ -1,52 +1,33 @@
 package ru.gb.spring.dao;
 
-import lombok.ToString;
-import org.hibernate.cfg.Configuration;
-import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.gb.spring.domain.Product;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
-@Repository
-@ToString
+@Service
+@RequiredArgsConstructor
 public class ProductDao {
-    final EntityManagerFactory factory = new Configuration().configure().buildSessionFactory();
-    EntityManager entityManager;
-
-    public Product findById(int id) {
-        return entityManager.find(Product.class, id);
-    }
+    private final DaoSessionFactory daoSessionFactory;
 
     public List<Product> findAll() {
-        entityManager = factory.createEntityManager();
-        entityManager.getTransaction().begin();
-        List<Product> products = entityManager.createQuery("select pr from Product as pr", Product.class).getResultList();
-        entityManager.getTransaction().commit();
-        return products;
+        return daoSessionFactory.findAll("Product.findAll", Product.class);
+    }
+
+    public Product findById(int id) {
+        return daoSessionFactory.findById("Product.findById", id, "id", Product.class);
     }
 
     public void add(Product product) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(product);
-        entityManager.getTransaction().commit();
+        daoSessionFactory.add(product);
     }
 
     public void remove(int id) {
-        Product product = entityManager.find(Product.class, id);
-        entityManager.getTransaction().begin();
-        entityManager.remove(product);
-        entityManager.getTransaction().commit();
+        daoSessionFactory.remove(id, Product.class);
     }
 
     public void change(Product product) {
-        entityManager.getTransaction().begin();
-        entityManager.createQuery("update Product set name = :title, price = :price where id = :id")
-                .setParameter("id", product.getId())
-                .setParameter("title", product.getName())
-                .setParameter("price", product.getPrice())
-                .executeUpdate();
-        entityManager.getTransaction().commit();
+        daoSessionFactory.change(product);
     }
 }

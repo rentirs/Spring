@@ -8,9 +8,7 @@
 
 <body>
 <form th:action="@{'/orders/add'}" th:object="${order}" method="post">
-    ID: <input type="text" th:field="*{id}"/>
-    <br>
-    Дата: <input type="text" th:field="*{date}"/>
+    Дата: <input type="date" th:field="*{date}"/>
     <br>
     Стоимость: <input type="text" th:field="*{cost}"/>
     <br>

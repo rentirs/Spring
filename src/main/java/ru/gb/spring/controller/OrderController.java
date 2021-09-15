@@ -1,47 +1,46 @@
 package ru.gb.spring.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.spring.domain.Order;
-import ru.gb.spring.dao.OrderRepository;
+import ru.gb.spring.dao.OrderDao;
 
 @Controller
+@RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderRepository repository;
+    private final OrderDao orderDao;
 
-    public OrderController(OrderRepository repository) {
-        this.repository = repository;
-    }
-
-    @GetMapping("/orders")
+    @GetMapping
     public String findAll(Model model) {
-        model.addAttribute("orders", repository.findAll());
+        model.addAttribute("orders", orderDao.findAll());
         return "orders";
     }
 
-    @GetMapping("/orders/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public Order findById(@PathVariable int id){
-        return repository.findById(id).orElseThrow();
+        return orderDao.findById(id);
     }
 
-    @GetMapping("/orders/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id){
-        repository.remove(id);
+        orderDao.remove(id);
         return "redirect:/orders";
     }
 
-    @GetMapping("/orders/add")
+    @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("order", new Order());
         return "orders-add";
     }
 
-    @PostMapping("/orders/add")
+    @PostMapping("/add")
     public String add(Order order) {
-        repository.add(order);
+        orderDao.add(order);
         return "redirect:/orders";
     }
 }
