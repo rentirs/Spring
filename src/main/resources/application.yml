@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.1.100:3306/products
+    username: gb
+    password: geekbrains
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true

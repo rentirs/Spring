@@ -12,10 +12,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "products")
-@NamedQueries({
-        @NamedQuery(name = "Product.findAll", query = "select a from Product a"),
-        @NamedQuery(name = "Product.findById", query = "select a from Product a where a.id = :id")
-})
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +22,7 @@ public class Product {
 
     private float price;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
-
-    public Product(String name, float price) {
-        this.name = name;
-        this.price = price;
-    }
+//    @ManyToOne
+//    @JoinColumn(name = "client_id", nullable = false)
+//    private Client client;
 }

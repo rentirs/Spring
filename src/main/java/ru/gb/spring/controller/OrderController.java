@@ -5,14 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.spring.domain.Order;
-import ru.gb.spring.dao.OrderDao;
+import ru.gb.spring.repository.OrderRepository;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderDao orderDao;
+    private final OrderRepository orderDao;
 
     @GetMapping
     public String findAll(Model model) {
@@ -22,13 +24,13 @@ public class OrderController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public Order findById(@PathVariable int id){
+    public Optional<Order> findById(@PathVariable int id){
         return orderDao.findById(id);
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id){
-        orderDao.remove(id);
+        orderDao.deleteById(id);
         return "redirect:/orders";
     }
 
@@ -40,7 +42,7 @@ public class OrderController {
 
     @PostMapping("/add")
     public String add(Order order) {
-        orderDao.add(order);
+        orderDao.save(order);
         return "redirect:/orders";
     }
 }

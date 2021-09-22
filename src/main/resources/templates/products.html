@@ -6,17 +6,18 @@
 </head>
 
 <body>
-<h1>Товары</h1>
+<h1>
+    <span  th:text="#{products.text}"/>
+</h1>
+<br>
 <div>
     <table border="1">
         <tr>
             <th>ID</th>
-            <th>Наименование</th>
+            <th><span th:utext="#{productName.text}"/></th>
             <th>Цена</th>
             <th>Удаление</th>
             <th>Изменение</th>
-            <th>Имя покупателя</th>
-            <th>Фамилия покупателя</th>
         </tr>
         <tr th:each ="item:${items}">
             <td th:utext="${item.getId()}">...</td>
@@ -24,8 +25,6 @@
             <td th:utext="${item.getPrice()}">...</td>
             <td> <a th:href="@{|/products/delete/${item.getId()}|}">Удалить</a></td>
             <td> <a th:href="@{|/products/change/${item.getId()}|}">Изменить</a></td>
-            <td th:utext="${item.getClient().getName()}">...</td>
-            <td th:utext="${item.getClient().getSurname()}">...</td>
         </tr>
     </table>
 </div>

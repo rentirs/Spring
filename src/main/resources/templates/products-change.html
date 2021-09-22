@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<form th:action="@{|/products/change/${product.getId}|}" th:object="${product}" method="post">
+<form th:action="@{|/products/change/${product.get().getId()}|}" th:object="${product}" method="post">
     Наименование: <input type="text" th:field="*{name}"/>
     <br>
     Цена: <input type="text" th:field="*{price}"/>

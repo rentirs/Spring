@@ -17,12 +17,6 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private String surname;
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-    private List<Product> products;
-
-    public Client(String name, String surname) {
-        this.name = name;
-        this.surname = surname;
-    }
+//    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+//    private List<Product> products;
 }
