@@ -8,7 +8,7 @@
 
 <body>
 <form th:action="@{/products/add}" th:object="${product}" method="post">
-    <span th:utext="#{productName.text}">: <input type="text" th:field="*{name}"/>
+    <span th:utext="#{productName.text}"/>: <input type="text" th:field="*{name}"/>
     <br>
     Цена: <input type="text" th:field="*{price}"/>
     <br>

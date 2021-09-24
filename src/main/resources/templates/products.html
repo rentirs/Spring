@@ -7,7 +7,7 @@
 
 <body>
 <h1>
-    <span  th:text="#{products.text}"/>
+    <span th:text="#{products.text}"/>
 </h1>
 <br>
 <div>
@@ -19,16 +19,18 @@
             <th>Удаление</th>
             <th>Изменение</th>
         </tr>
-        <tr th:each ="item:${items}">
+        <tr th:each ="item : ${items}">
             <td th:utext="${item.getId()}">...</td>
             <td th:utext="${item.getName()}">...</td>
             <td th:utext="${item.getPrice()}">...</td>
             <td> <a th:href="@{|/products/delete/${item.getId()}|}">Удалить</a></td>
             <td> <a th:href="@{|/products/change/${item.getId()}|}">Изменить</a></td>
-        </tr>
+         </tr>
     </table>
+    <br>
+    <a th:if="${pages}>1 and ${curPage}>1" th:href="@{/products/step/-1}">Предыдущая</a>
+    <a th:if="${pages}>1 and ${curPage}<${pages}" th:href="@{/products/step/1}">Следующая</a>
 </div>
-
 <a href="products/add">Добавить новый товар в репозиторий</a>
 <br>
 <a href=index.html>На главную</a>

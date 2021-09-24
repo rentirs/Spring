@@ -17,11 +17,22 @@ import java.util.Optional;
 public class ProductController {
 
     private final ProductRepository productRepository;
+    private int page = 1;
 
     @GetMapping
-    public String findAll(Model model) {
-        model.addAttribute("items", productRepository.findAll());
+    public String findTen(Model model) {
+        int quantity = (int) productRepository.count();
+        int pages = (quantity%10 == 0) ? quantity/10 : quantity/10 + 1;
+        model.addAttribute("items", productRepository.findProductsByIdBetween(page * 10 - 9, page * 10));
+        model.addAttribute("pages", pages);
+        model.addAttribute("curPage", page);
         return "products";
+    }
+
+    @GetMapping("/step/{step}")
+    public String nextPage(@PathVariable int step) {
+        page = page + step;
+        return "redirect:/products";
     }
 
     @GetMapping("/{id}")
