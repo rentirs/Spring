@@ -21,8 +21,4 @@ public class Product {
     private String name;
 
     private float price;
-
-//    @ManyToOne
-//    @JoinColumn(name = "client_id", nullable = false)
-//    private Client client;
 }

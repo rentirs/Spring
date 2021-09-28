@@ -1,97 +1,80 @@
 package ru.gb.spring.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.spring.domain.Product;
+import ru.gb.spring.error.ProductError;
 import ru.gb.spring.repository.ProductRepository;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductRepository productRepository;
-    private int page = 1;
 
     @GetMapping
-    public String findTen(Model model) {
-        int quantity = (int) productRepository.count();
-        int pages = (quantity%10 == 0) ? quantity/10 : quantity/10 + 1;
-        model.addAttribute("items", productRepository.findProductsByIdBetween(page * 10 - 9, page * 10));
-        model.addAttribute("pages", pages);
-        model.addAttribute("curPage", page);
-        return "products";
-    }
-
-    @GetMapping("/step/{step}")
-    public String nextPage(@PathVariable int step) {
-        page = page + step;
-        return "redirect:/products";
+    public ResponseEntity<Iterable<Product>> findAll() {
+        return ResponseEntity.ok(productRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
-    public Optional<Product> findById(@PathVariable int id) {
-        return productRepository.findById(id);
+    public ResponseEntity<Product> findById(@PathVariable int id) {
+        Optional<Product> maybeProduct = productRepository.findById(id);
+        if (maybeProduct.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(maybeProduct.get());
     }
 
-    @GetMapping(value = "/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable int id) {
+        if (productRepository.findById(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
         productRepository.deleteById(id);
-        return "redirect:/products";
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/add")
-    public String add(Model model) {
-        model.addAttribute("product", new Product());
-        return "products-add";
+    @PostMapping()
+    public ResponseEntity<Product> add(@RequestBody Product product) {
+        Product newProduct = productRepository.save(product);
+        return ResponseEntity.created(URI.create("/products/" + newProduct.getId())).body(newProduct);
     }
 
-    @PostMapping(value = "/add")
-    public String add(Product product) {
-        productRepository.save(product);
-        return "redirect:/products";
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public Product update(@RequestBody Product product) {
+        return productRepository.save(product);
     }
 
-    @GetMapping(value = "/change/{id}")
-    public String change(@PathVariable("id") int id, Model model) {
-        model.addAttribute("product", productRepository.findById(id));
-        return "products-change";
+    @GetMapping("/expensively/{priceMin}")
+    public ResponseEntity<Iterable<Product>> findProductsByPriceAfter(@PathVariable("priceMin") float priceMin) {
+        return ResponseEntity.ok(productRepository.findProductsByPriceAfter(priceMin));
     }
 
-    @PostMapping(value = "/change/{id}")
-    public String change(Product product) {
-        productRepository.save(product);
-        return "redirect:/products";
+    @GetMapping("/cheaper/{priceMax}")
+    public ResponseEntity<Iterable<Product>> findProductsByPriceBefore(@PathVariable("priceMax") float priceMax) {
+        return ResponseEntity.ok(productRepository.findProductsByPriceBefore(priceMax));
     }
 
-    @GetMapping(value = "/expensively/{priceMin}")
-    @ResponseBody
-    public List<Product> findProductsByPriceAfter(@PathVariable("priceMin") float priceMin) {
-        List<Product> products = new ArrayList<>();
-        productRepository.findProductsByPriceAfter(priceMin).forEach(products::add);
-        return products;
+    @GetMapping("/between/{priceMin}/{priceMax}")
+    public ResponseEntity<Iterable<Product>> findProductsByPriceAfter(@PathVariable("priceMin") float priceMin, @PathVariable("priceMax") float priceMax) {
+        return ResponseEntity.ok(productRepository.findProductsByPriceBetween(priceMin, priceMax));
     }
 
-    @GetMapping(value = "/cheaper/{priceMax}")
-    @ResponseBody
-    public List<Product> findProductsByPriceBefore(@PathVariable("priceMax") float priceMax) {
-        List<Product> products = new ArrayList<>();
-        productRepository.findProductsByPriceBefore(priceMax).forEach(products::add);
-        return products;
-    }
-
-    @GetMapping(value = "/between/{priceMin}/{priceMax}")
-    @ResponseBody
-    public List<Product> findProductsByPriceAfter(@PathVariable("priceMin") float priceMin, @PathVariable("priceMax") float priceMax) {
-        List<Product> products = new ArrayList<>();
-        productRepository.findProductsByPriceBetween(priceMin, priceMax).forEach(products::add);
-        return products;
+    @ExceptionHandler
+    public ResponseEntity<ProductError> handleException(RuntimeException ex) {
+        return ResponseEntity.internalServerError()
+                .body(new ProductError(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage()));
     }
 }
