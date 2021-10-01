@@ -57,21 +57,6 @@ public class ProductController {
         return productRepository.save(product);
     }
 
-    @GetMapping("/expensively/{priceMin}")
-    public ResponseEntity<Iterable<Product>> findProductsByPriceAfter(@PathVariable("priceMin") float priceMin) {
-        return ResponseEntity.ok(productRepository.findProductsByPriceAfter(priceMin));
-    }
-
-    @GetMapping("/cheaper/{priceMax}")
-    public ResponseEntity<Iterable<Product>> findProductsByPriceBefore(@PathVariable("priceMax") float priceMax) {
-        return ResponseEntity.ok(productRepository.findProductsByPriceBefore(priceMax));
-    }
-
-    @GetMapping("/between/{priceMin}/{priceMax}")
-    public ResponseEntity<Iterable<Product>> findProductsByPriceAfter(@PathVariable("priceMin") float priceMin, @PathVariable("priceMax") float priceMax) {
-        return ResponseEntity.ok(productRepository.findProductsByPriceBetween(priceMin, priceMax));
-    }
-
     @ExceptionHandler
     public ResponseEntity<ProductError> handleException(RuntimeException ex) {
         return ResponseEntity.internalServerError()
