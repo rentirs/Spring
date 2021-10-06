@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение товара в репозитории</title>
+</head>
+
+<body>
+<form th:action="@{|/products/change/${product.get().getId()}|}" th:object="${product}" method="post">
+    Наименование: <input type="text" th:field="*{name}"/>
+    <br>
+    Цена: <input type="text" th:field="*{price}"/>
+    <br>
+    <input type="submit" value="Сохранить">
+</form>
+</body>
+</html>

@@ -1,22 +1,15 @@
 package ru.gb.spring.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.spring.domain.Product;
-import ru.gb.spring.error.ProductError;
 import ru.gb.spring.repository.ProductRepository;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
@@ -24,42 +17,45 @@ public class ProductController {
     private final ProductRepository productRepository;
 
     @GetMapping
-    public ResponseEntity<Iterable<Product>> findAll() {
-        return ResponseEntity.ok(productRepository.findAll());
+    public String findAll(Model model) {
+        model.addAttribute("items", productRepository.findAll());
+        return "products";
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findById(@PathVariable int id) {
-        Optional<Product> maybeProduct = productRepository.findById(id);
-        if (maybeProduct.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(maybeProduct.get());
+    @ResponseBody
+    public Optional<Product> findById(@PathVariable int id) {
+        return productRepository.findById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable int id) {
-        if (productRepository.findById(id).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping(value = "/delete/{id}")
+    public String delete(@PathVariable("id") int id) {
         productRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return "redirect:/products";
     }
 
-    @PostMapping()
-    public ResponseEntity<Product> add(@RequestBody Product product) {
-        Product newProduct = productRepository.save(product);
-        return ResponseEntity.created(URI.create("/products/" + newProduct.getId())).body(newProduct);
+    @GetMapping(value = "/add")
+    public String add(Model model) {
+        model.addAttribute("product", new Product());
+        return "products-add";
     }
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public Product update(@RequestBody Product product) {
-        return productRepository.save(product);
+    @PostMapping(value = "/add")
+    public String add(Product product) {
+        productRepository.save(product);
+        return "redirect:/products";
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ProductError> handleException(RuntimeException ex) {
-        return ResponseEntity.internalServerError()
-                .body(new ProductError(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage()));
+    @GetMapping(value = "/change/{id}")
+    public String change(@PathVariable("id") int id, Model model) {
+        model.addAttribute("product", productRepository.findById(id));
+        return "products-change";
+    }
+
+    @PostMapping(value = "/change/{id}")
+    public String change(Product product) {
+        productRepository.save(product);
+        return "redirect:/products";
     }
 }
+

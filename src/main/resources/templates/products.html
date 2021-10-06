@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Товары</title>
+</head>
+
+<body>
+<h1>
+    <span th:text="Товары"/>
+</h1>
+
+<div sec:authorize="isAuthenticated()">
+    Имя пользователя: <div sec:authentication="principal.username"></div>
+    Права: <div sec:authentication="principal.authorities"></div>
+</div>
+
+
+<br>
+<div>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Цена</th>
+            <th sec:authorize="hasRole('ADMIN')">Удаление</th>
+            <th sec:authorize="hasRole('MANAGER')">Изменение</th>
+        </tr>
+        <tr th:each="item : ${items}">
+            <td th:utext="${item.getId()}">...</td>
+            <td th:utext="${item.getName()}">...</td>
+            <td th:utext="${item.getPrice()}">...</td>
+            <td sec:authorize="hasRole('ADMIN')"><a th:href="@{|/products/delete/${item.getId()}|}">Удалить</a></td>
+            <td sec:authorize="hasRole('MANAGER')"><a th:href="@{|/products/change/${item.getId()}|}">Изменить</a></td>
+        </tr>
+    </table>
+</div>
+<a sec:authorize="hasRole('MANAGER')" href="products/add">Добавить новый товар в репозиторий</a>
+<br>
+<a href=/index.html>На главную</a>
+</body>
+</html>

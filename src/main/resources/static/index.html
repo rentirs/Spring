@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Geekbrains Spring-Boot Lessons</title>
+</head>
+<body>
+<h1>Товары и заказы</h1>
+<br>
+<a href=products/>Вывести список товаров</a>
+<br>
+<a sec:authorize="hasRole('ADMIN')" href=users>Список пользователей</a>
+<br>
+<a href="/logout">Logout</a>
+</body>
+</html>

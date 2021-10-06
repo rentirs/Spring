@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+
+<body>
+<h1>
+    <span th:text="Пользователи"/>
+</h1>
+<br>
+<div>
+    <table border="1">
+        <tr>
+            <th>user name</th>
+            <th>password</th>
+            <th>authorities</th>
+        </tr>
+        <tr th:each="item : ${items}">
+            <td th:utext="${item.getUsername()}">...</td>
+            <td th:utext="${item.getPassword()}">...</td>
+            <td th:utext="${item.getAuthorities()}">...</td>
+        </tr>
+    </table>
+</div>
+<a sec:authorize="hasRole('SUPERADMIN')" href="users/add">Добавить пользователя</a>
+<br>
+<a href=/index.html>На главную</a>
+</body>
+</html>
