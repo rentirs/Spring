@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Товары</title>
 </head>
-
 <body>
 <h1>
     <span th:text="Товары"/>
@@ -12,7 +11,6 @@
 
 <div sec:authorize="isAuthenticated()">
     Имя пользователя: <div sec:authentication="principal.username"></div>
-    Права: <div sec:authentication="principal.authorities"></div>
 </div>
 
 
@@ -37,6 +35,6 @@
 </div>
 <a sec:authorize="hasRole('MANAGER')" href="products/add">Добавить новый товар в репозиторий</a>
 <br>
-<a href=/index.html>На главную</a>
+<a href="/">На главную</a>
 </body>
 </html>

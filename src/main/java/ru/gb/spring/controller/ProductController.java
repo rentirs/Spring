@@ -24,12 +24,12 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public Optional<Product> findById(@PathVariable int id) {
+    public Optional<Product> findById(@PathVariable long id) {
         return productRepository.findById(id);
     }
 
     @GetMapping(value = "/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") long id) {
         productRepository.deleteById(id);
         return "redirect:/products";
     }
@@ -47,7 +47,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/change/{id}")
-    public String change(@PathVariable("id") int id, Model model) {
+    public String change(@PathVariable("id") long id, Model model) {
         model.addAttribute("product", productRepository.findById(id));
         return "products-change";
     }

@@ -12,14 +12,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "products")
-public class Product {
+@Table
+public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    @Column(name = "title")
-    String name;
-    float price;
-    @ManyToMany
-    List<Cart> cartList;
+    @OneToOne
+    User user;
+    @OneToMany
+    List<Product> productList;
 }
