@@ -2,25 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sh">
     <title>Geekbrains Spring-Boot Lessons</title>
 </head>
 <body>
-<h1>Товары и заказы</h1>
-<br>
-<div sec:authorize="isAuthenticated()">
-    Имя пользователя: <h3 sec:authentication="principal.username"></h3>
-</div>
-<div sec:authorize="!isAuthenticated()">
-    <a href="/login">Войти</a>
+<div class="container">
+    <h1 class="footer">Товары и заказы</h1>
     <br>
-    <a href="/registration">Зарегистрироваться</a>
+    <div sec:authorize="isAuthenticated()">
+        Имя пользователя: <h3 sec:authentication="principal.username"></h3>
+    </div>
+    <div sec:authorize="!isAuthenticated()">
+        <a href="/login">Войти</a>
+        <br>
+        <a href="/registration">Зарегистрироваться</a>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <a href="/logout">Выйти</a>
+    </div>
+    <br>
+    <a href=/products>Вывести список товаров</a>
+    <br>
+    <a sec:authorize="hasRole('ADMIN')" href=users>Список пользователей</a>
 </div>
-<div sec:authorize="isAuthenticated()">
-    <a href="/logout">Выйти</a>
-</div>
-<br>
-<a href=/products>Вывести список товаров</a>
-<br>
-<a sec:authorize="hasRole('ADMIN')" href=users>Список пользователей</a>
 </body>
 </html>
