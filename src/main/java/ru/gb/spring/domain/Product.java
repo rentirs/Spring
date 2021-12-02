@@ -21,6 +21,7 @@ public class Product {
     @Column(name = "title")
     String name;
     float price;
-    @ManyToMany
-    List<Cart> cartList;
+//    @ManyToMany
+//    List<Cart> cartList;
+
 }
